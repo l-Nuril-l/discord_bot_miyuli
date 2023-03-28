@@ -1,6 +1,7 @@
 import { ChatGPTAPI } from 'chatgpt';
 import { AttachmentBuilder, Client, Events, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
+import './background.js';
 dotenv.config();
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildModeration] });
 const { DISCORD_TOKEN: token, PREFIX: prefix } = process.env;
