@@ -1,3 +1,4 @@
+const mySecret = process.env['DISCORD_TOKEN']
 import { REST, Routes } from 'discord.js';
 import fs from 'fs';
 import path from 'path';
