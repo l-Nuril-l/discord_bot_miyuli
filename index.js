@@ -57,10 +57,7 @@ client.login(token);
 
 const app = express();
 app.get('/', (req, res) => {
-  res.send('Hello Express app!')
-});
-app.get('/a', (req, res) => {
-  res.send('Hello Express app! A')
+  res.redirect('discord://')
 });
 app.listen(process.env.PORT || 3000, () => {
   console.log('server started');
