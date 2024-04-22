@@ -33,6 +33,10 @@ client.on(Events.MessageCreate, async message => {
     const answer = '¯\_(ツ)_/¯';
     message.channel.send(answer);
   }
+  else if (command === 'discord') {
+    const answer = 'https://discord.com/developers/active-developer';
+    message.channel.send(answer);
+  }
   else if (command === 'ask') {
     if (!(message.content.slice(5).length > 1)) return
     // const res = await gpt.sendMessage(message.content.slice(5))
