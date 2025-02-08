@@ -2,7 +2,8 @@
   "dependencies": {
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "node-fetch": "^3.3.2"
   },
   "name": "miyuli-discord-bot",
   "version": "1.0.0",
@@ -10,7 +11,8 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "prod": "rsync -avz --exclude-from='.gitignore' . root@49.13.88.73:/root/discord_bot_miyuli/ && ssh root@49.13.88.73 \"cd /root/discord_bot_miyuli/ && pm2 restart ds\""
   },
   "author": "Nuril",
   "license": "ISC",

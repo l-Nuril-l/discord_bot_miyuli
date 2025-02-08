@@ -1,14 +1,11 @@
 import { AttachmentBuilder, Client, Events, GatewayIntentBits } from 'discord.js';
 import dotenv from 'dotenv';
 import express from 'express';
+import { chatWithAI } from './services/aiChat.js';
 
 dotenv.config();
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildModeration] });
 const { DISCORD_TOKEN: token, PREFIX: prefix } = process.env;
-
-// const gpt = new ChatGPTAPI({
-//   apiKey: process.env.OPENAI_API_KEY
-// })
 
 client.once(Events.ClientReady, c => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
@@ -39,10 +36,26 @@ client.on(Events.MessageCreate, async message => {
   }
   else if (command === 'ask') {
     if (!(message.content.slice(5).length > 1)) return
-    // const res = await gpt.sendMessage(message.content.slice(5))
-    // message.channel.send({ content: res.text });
+    try {
+      const userMessage = message.content.slice(5);
+      message.channel.sendTyping();
+      const userInfo = {
+        username: message.author.username,
+        nickname: message.member?.nickname || message.author.username,
+        id: message.author.id
+      };
+      const responseChunks = await chatWithAI(message.author.id, userMessage, userInfo);
+      
+      // Send each chunk as a separate message
+      for (const chunk of responseChunks) {
+        await message.channel.send(chunk);
+      }
+    } catch (error) {
+      console.error('Error in ask command:', error);
+      message.reply('Извините, произошла ошибка при обработке вашего запроса.');
+    }
   }
-  else if (message.author.id === '602608266278731777') {
+  else if (message.author.id === '1309626428395884674') {
     const attachment = new AttachmentBuilder('target-detected.mp3');
     message.channel.send({ files: [attachment] });
   }
