@@ -13,9 +13,17 @@ client.once(Events.ClientReady, c => {
 
 client.on(Events.MessageCreate, async message => {
   console.log(message)
-  if (message.content.includes('https://discord.gg')) {
+
+  const isBot = message.author.bot;
+
+  // Проверка: меньше 1 дня на сервере
+  const joinedAt = message.member?.joinedAt;
+  const isNewUser = joinedAt && (Date.now() - joinedAt.getTime()) < 1000 * 60 * 60 * 24
+
+  if (message.content.includes('https://discord.gg') && !isBot && !isNewUser) {
     message.delete();
-    message.reply("Это бан...");
+    message.reply(`@${message.author.isNewUser} сын шлюхи! ${isNewUser ? "BANNED!" : ""}`);
+    if (isNewUser) message.member.ban();
   }
 
   if (!message.content.startsWith(prefix) || message.author.bot) return;
@@ -45,7 +53,7 @@ client.on(Events.MessageCreate, async message => {
         id: message.author.id
       };
       const responseChunks = await chatWithAI(message.author.id, userMessage, userInfo);
-      
+
       // Send each chunk as a separate message
       for (const chunk of responseChunks) {
         await message.channel.send(chunk);
